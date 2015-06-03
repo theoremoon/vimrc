@@ -4,22 +4,26 @@ scriptencoding utf-8
 " set base element
 set number
 set imdisable
+set showmatch
+set cursorline
 
 " setting about indent
 set expandtab
 set shiftwidth=2
 set softtabstop=2
+set autoindent
+set smartindent
 
 nnoremap > V>
 nnoremap < V<
 nnoremap = V=
 
 " setting about comment
-augroup auto_comment_off
-	autocmd!
-	autocmd BufEnter * setlocal formatoptions-=r
-	autocmd BufEnter * setlocal formatoptions-=o
-augroup END
+" augroup auto_comment_off
+" 	autocmd!
+" 	autocmd BufEnter * setlocal formatoptions-=r
+" 	autocmd BufEnter * setlocal formatoptions-=o
+" augroup END
 
 
 set directory=~/.vim/tmp
@@ -47,6 +51,7 @@ NeoBundleFetch "Shougo/neobundle.vim"
 	NeoBundle "altercation/vim-colors-solarized"
 	NeoBundle "mattn/gist-vim", {"depends": "mattn/webapi-vim"}
 	NeoBundle "mattn/emmet-vim"
+        NeoBundle "nanotech/jellybeans.vim"
 call neobundle#end()
 NeoBundleCheck
 filetype plugin indent on
@@ -55,7 +60,7 @@ filetype plugin indent on
 set background=light
 
 "QuickRun.vim
-let g:quickrun_config={"_":{"hook/time/enable":1, "runner":"vimproc"}, "cpp":{"command":"clang++", "cmdopt":"-std=c++1y -Wall"}}
+let g:quickrun_config={"_":{"hook/time/enable":1}, "cpp":{"command":"clang++", "cmdopt":"-std=c++1y -Wall"}}
 nnoremap <silent><C-q> :QuickRun &filetype
 "nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions():"\<C-c>"
 
@@ -73,13 +78,6 @@ let g:neosnippet#snippets_directory="~/.vim/bundle/neosnippet-snippets/neosnippe
 " gist.vim
 let g:gist_clip_command = "pbcopy"
 let g:gist_detect_filetype = 1
-
-" settin keymap
-inoremap <C-h> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-inoremap <C-f> <Esc>
 
 "neosnippet-keymap
 	imap <C-g> <Plug>(neosnippet_expand_or_jump)
@@ -114,5 +112,7 @@ inoremap <C-f> <Esc>
 
 "emmet-vim
 
+
 syntax enable
-colorscheme koehler 
+colorscheme jellybeans
+set background=dark
