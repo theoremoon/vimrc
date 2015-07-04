@@ -68,6 +68,9 @@ language time C
 " 長い行は折り返し
 set wrap
 
+" 行番号
+set number
+
 " ウィンドウをなるべく30文字以上入るサイズに
 set winwidth=30
 
@@ -190,15 +193,27 @@ endif
 
 " NeoBundleの設定
 if has('vim_starting')
-  set runtimepath+=expand($HOME.'/.vim/bundle/neobundle.vim')
+  set runtimepath+=~/.vim/bundle/neobundle.vim
 endif
 
 call neobundle#begin(expand($HOME.'/.vim/bundle'))
-NeoBundleFetch "Shougo/neobundle.vim"
+NeoBundleFetch 'Shougo/neobundle.vim'
+  NeoBundle 'Shougo/unite.vim'
+  NeoBundle 'Shougo/neomru.vim'
+
+  NeoBundle 'ctrlpvim/ctrlp.vim'
+  NeoBundle 'nixprime/cpsm'
+
+  NeoBundle 'tomtom/tcomment_vim'
+  NeoBundle 'bronson/vim-trailing-whitespace'
+  NeoBundle 'cohama/lexima.vim'
+
+  NeoBundle 'tomasr/molokai'
 call neobundle#end()
 NeoBundleCheck
 filetype plugin indent on
 
+colorscheme molokai
 
 """ 参考というかぱくり
 """ https://github.com/rhysd/dotfiles/blob/master/vimrc
