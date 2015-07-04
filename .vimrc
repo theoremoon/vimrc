@@ -1,118 +1,204 @@
 scriptencoding utf-8
-" use multibyte string in .vimrc
+"vimrcで日本語を使うための設定
 
-" set base element
-set number
-set imdisable
+" エンコーディング
+  set encoding=utf-8
+  set termencoding=utf-8
+  set fileencoding=utf-8
+  set fileencodings=utf-8,cp932
+
+" 改行コード
+set fileformats=unix,dos,mac
+
+" viとの互換性を保たない
+set nocompatible
+
+" バックアップファイル
+  " swapファイル
+  if ! isdirectory($HOME.'/.vim/swap')
+    call mkdir($HOME.'/.vim/swap', 'p')
+  endif
+  set directory=$HOME.'/.vim/swap'
+
+  " .un~ファイル
+  if has('persistent_undo')
+    if ! isdirectory($HOME.'/.vim/undo')
+      call mkdir($HOME.'/.vim/undo', 'p')
+    endif
+    set undodir=$HOME/.vim/tmp
+    set undofile
+  endif
+
+  " .~ファイル
+  set backupdir=$HOME/.vim/tmp
+
+" 言語設定
+language message C
+language time C
+
+" インデント周り
+  " 自動インデント
+  " set autoindent
+  " かしこいんでんと
+  " set smartindent
+  " さらにかCこいんでんと
+  set cindent
+
+  " Tab文字の幅
+  set tabstop=2
+  " 自動インデントで何レベルインデントするか
+  set shiftwidth=2
+  " Tabの代わりに挿入される空白の量
+  set softtabstop=2
+  " インデントをshiftwidthの値の倍数に丸める
+  set shiftround
+  " 賢いタブ
+  set smarttab
+
+  " タブの代わりにスペースを挿入
+  set expandtab
+
+  "折り返しでインデント保持
+  if exists('+breakindent')
+    set breakindent
+    set breakindentopt=shift:-2
+    let &showbreak = '> '
+  endif
+
+" 長い行は折り返し
+set wrap
+
+" ウィンドウをなるべく30文字以上入るサイズに
+set winwidth=30
+
+" 検索まわり
+  " 検索がぐるっとまわる
+  set wrapscan
+
+  " 大文字小文字を区別しない
+  set ignorecase
+  " 賢く大文字小文字を区別
+  set smartcase
+
+  " 検索結果ハイライト
+  set hlsearch
+
+  " 検索途中にもカーソルを動かす(ように見せる
+  set incsearch
+
+" 括弧を入力すると対応する括弧に僅かの間ジャンプする
 set showmatch
-set cursorline
 
-" setting about indent
-set expandtab
-set shiftwidth=2
-set softtabstop=2
-set autoindent
-set smartindent
+" カーソル位置を表示
+set ruler
 
-nnoremap > V>
-nnoremap < V<
-nnoremap = V=
+" ステータス行を常に表示
+set laststatus=2
 
-" setting about comment
-" augroup auto_comment_off
-" 	autocmd!
-" 	autocmd BufEnter * setlocal formatoptions-=r
-" 	autocmd BufEnter * setlocal formatoptions-=o
-" augroup END
+" スクロールした時にちょとｔ余白
+set scrolloff=5
 
+" ビープ音しない
+set vb t_vb=
 
-set directory=~/.vim/tmp
-set backupdir=~/.vim/tmp
-set undodir=~/.vim/tmp
-" setting neobundle.vim
-set runtimepath+=~/.vim/bundle/neobundle.vim/
+" 起動時メッセージ消す
+set shortmess& shortmess+=I
 
-call neobundle#begin(expand("~/.vim/bundle/"))
+" InputMethod周り
+  "IMを使う
+  set noimdisable
+  " 起動時にIMをOFF
+  set iminsert=0 imsearch=0
+  "コマンドラインでのIM無効化
+  set noimcmdline
+
+" 改行のときコメント続けない設定
+  set formatoptions-=r
+  set formatoptions-=o
+
+" 日本語ヘルプ見る
+set helplang=ja,en
+
+" OSのクリップボード使う
+set clipboard=unnamed
+
+" 矩形選択で自由に移動
+set virtualedit& virtualedit+=block
+
+" 行を折り返さない
+set textwidth=0
+
+" コマンドの実行中は再描画しない
+set lazyredraw
+
+" ソースコードの折りたたみする
+  set foldenable
+  set foldmethod=marker
+
+" マルチバイト文字への表示対応
+set ambiwidth=double
+
+" ステータスライン
+set rulerformat=%45(%12f%=\ %m%{'['.(&fenc!=''?&fenc:&enc).']'}\ %l-%v\ %p%%\ [%02B]%)
+set statusline=%f:\ %{substitute(getcwd(),'.*/','','')}\ %m%=%{(&fenc!=''?&fenc:&enc).':'.strpart(&ff,0,1)}\ %l-%v\ %p%%\ %02B
+
+" リストヘッダ
+set formatlistpat&
+let &formatlistpat .= '\|^\s*[*+-]\s*'
+
+" 一定時間操作しない時に、カーソルラインを強調
+autocmd CursorMoved,CursorMovedI,WinLeave * setlocal nocursorline
+autocmd CursorHold,CursorHoldI,WinEnter * setlocal cursorline
+
+" md拡張子はmarkdown
+autocmd BufRead,BufNew,BufNewFile *.md,*.markdown,*.mkd setlocal ft=markdown
+
+" カレントパスをクリップボードにコピー
+command! CopyCurrentPath :call s:copy_current_path()
+function! s:copy_current_path()
+  if has('win32') || has('win64')
+    let c = substitute(expand('%:p'), '\\/', '\\', 'g')
+  elseif has('unix')
+    let c = expand('%:p')
+  endif
+
+  if &clipboard ==# 'plus$'
+    let @+ = c
+  else
+    let @* = c
+  endif
+endfunction
+
+" 文字数カウント
+command! -nargs=0 Wc %s/.//nge
+
+" --- --- --
+" プラグインまわり
+" --- --- --
+
+" NeoBundleがなければインストール
+if ! isdirectory(expand($HOME.'/.vim/bundle'))
+  echon "Installing neobundle.vim..."
+  silent call mkdir(expand($HOME.'/.vim/bundle'), 'p')
+  silent !git clone https://github.com/Shougo/neobundle.vim $HOME/.vim/bundle/neobundle.vim
+  echo "done."
+  if v:shell_error
+    echoerr "neobundle.vim installation has failed!"
+    finish
+  endif
+endif
+
+" NeoBundleの設定
+if has('vim_starting')
+  set runtimepath+=expand($HOME.'/.vim/bundle/neobundle.vim')
+endif
+
+call neobundle#begin(expand($HOME.'/.vim/bundle'))
 NeoBundleFetch "Shougo/neobundle.vim"
-	NeoBundle "Shougo/unite.vim"
-		NeoBundle "Shougo/neomru.vim"
-		NeoBundle "ujihisa/unite-colorscheme"
-	NeoBundle "Shougo/vimshell.vim"
-	NeoBundle "Shougo/neocomplete.vim"
-	NeoBundle "Shougo/neosnippet.vim"
-		NeoBundle "Shougo/neosnippet-snippets"
-	NeoBundle "Shougo/context_filetype.vim"
-	NeoBundle "Shougo/vimproc",{"build":{"mac":"make -f make_mac.mak"}}
-	NeoBundle "Shougo/vinarise"
-	NeoBundle "tyru/restart.vim"
-	NeoBundle "tyru/caw.vim"
-	NeoBundle "thinca/vim-quickrun"
-	NeoBundle "osyo-manga/vim-precious"
-	NeoBundle "altercation/vim-colors-solarized"
-	NeoBundle "mattn/gist-vim", {"depends": "mattn/webapi-vim"}
-	NeoBundle "mattn/emmet-vim"
-        NeoBundle "nanotech/jellybeans.vim"
 call neobundle#end()
 NeoBundleCheck
 filetype plugin indent on
 
-"Color Scheme
-set background=light
 
-"QuickRun.vim
-let g:quickrun_config={"_":{"hook/time/enable":1}, "cpp":{"command":"clang++", "cmdopt":"-std=c++1y -Wall"}}
-nnoremap <silent><C-q> :QuickRun &filetype
-"nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions():"\<C-c>"
-
-"tyru/caw.vim
-nmap <C-c> <Plug>(caw:I:toggle)
-vmap <C-c> <Plug>(caw:I:toggle)
-
-"neocomplete.vim
-let g:neocomplete#enale_at_startup=1
-
-"neosnippet.vim
-let g:neosnippet#enable_snipmate_compatibility=1
-let g:neosnippet#snippets_directory="~/.vim/bundle/neosnippet-snippets/neosnippets"
-
-" gist.vim
-let g:gist_clip_command = "pbcopy"
-let g:gist_detect_filetype = 1
-
-"neosnippet-keymap
-	imap <C-g> <Plug>(neosnippet_expand_or_jump)
-	smap <C-g> <Plug>(neosnippet_expand_or_jump)
-	xmap <C-g> <Plug>(neosnippet_expand_target)
-
-	imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)"
-	\: pumvisible() ? "\<C-n>" : "\<TAB>"
-	smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)"
-	\: "\<TAB>"
-
-	if has('conceal')
-		set conceallevel=2 concealcursor=i
-	endif
-
-"unite-keymap
-	nnoremap [unite] <Nop>
-	nmap <Space>u [unite]
-	"
-	nnoremap [unite]c :Unite colorscheme -auto-preview
-	nnoremap [unite]f :Unite file<CR>
-	nnoremap [unite]m :Unite file_mru<CR>
-
-"vimrc-keymap
-	nnoremap [vimrc] <Nop>
-	nmap <Space>v [vimrc]
-	"
-	nnoremap [vimrc]l :source ~/.vimrc<CR>
-	nnoremap [vimrc]e :e ~/.vimrc<CR>
-
-"emmet-vim
-
-
-syntax enable
-colorscheme jellybeans
-set background=dark
+""" 参考というかぱくり
+""" https://github.com/rhysd/dotfiles/blob/master/vimrc
