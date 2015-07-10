@@ -2,7 +2,7 @@ scriptencoding utf-8
 "vimrcで日本語を使うための設定
 
 " エンコーディング
-  set encoding=utf-8
+  "set encoding=utf-8
   set termencoding=utf-8
   set fileencoding=utf-8
   set fileencodings=utf-8,cp932
@@ -30,6 +30,9 @@ set nocompatible
   endif
 
   " .~ファイル
+  if ! isdirectory($HOME.'/.vim/tmp')
+    call mkdir($HOME.'/.vim/tmp', 'p')
+  endif
   set backupdir=$HOME/.vim/tmp
 
 " 言語設定
