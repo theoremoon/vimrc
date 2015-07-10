@@ -2,10 +2,9 @@ scriptencoding utf-8
 "vimrcで日本語を使うための設定
 
 " エンコーディング
-  "set encoding=utf-8
+  set encoding=utf-8
   set termencoding=utf-8
-  set fileencoding=utf-8
-  set fileencodings=utf-8,cp932
+  set fileencodings=utf-8,cp932,sjis,euc-jp
 
 " 改行コード
 set fileformats=unix,dos,mac
@@ -178,6 +177,7 @@ endfunction
 " 文字数カウント
 command! -nargs=0 Wc %s/.//nge
 
+" エンコードを強制的にutf-8にする
 function! Set_encoding_to_utf8()
   let v = &enc ==? 'utf-8'
   if v
@@ -187,10 +187,17 @@ function! Set_encoding_to_utf8()
   endif
 endfunction
 
-augroup loaded
+augroup bufread
   autocmd!
   autocmd BufRead * :call Set_encoding_to_utf8()
 augroup END
+
+" --- --- --
+" キーマッピング
+" --- --- --
+nnoremap > >>
+nnoremap < <<
+nnoremap = V=
 
 " --- --- --
 " プラグインまわり
@@ -223,12 +230,45 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
   NeoBundle 'tomtom/tcomment_vim'
   NeoBundle 'bronson/vim-trailing-whitespace'
-  NeoBundle 'cohama/lexima.vim'
+  NeoBundle 'tpope/vim-surround'
+  NeoBundle 'easymotion/vim-easymotion'
+  NeoBundle 'haya14busa/incsearch.vim'
+  NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 
   NeoBundle 'tomasr/molokai'
 call neobundle#end()
 NeoBundleCheck
 filetype plugin indent on
+
+"--
+"プラグインの設定
+"--
+
+" CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+  " cpsm
+  let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
+
+" vim-easymotion
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_leader_key = '<space>'
+map (easymotion_prefix)
+map <Leader> <Plug>(easymotion-prefix)
+
+nmap <Leader>s <Plug>(easymotion-s2)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+" incsearch.vim
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-forward)
+map g/ <Plug>(incsearch-forward)
+
+  " fuzzy
+  map z/ <Plug>(incsearch-fuzzy-/)
+  map z? <Plug>(incsearch-fuzzy-?)
+  map zg/ <Plug>(incsearch-fuzzy-stay)
 
 colorscheme molokai
 
