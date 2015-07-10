@@ -178,6 +178,20 @@ endfunction
 " 文字数カウント
 command! -nargs=0 Wc %s/.//nge
 
+function! Set_encoding_to_utf8()
+  let v = &enc ==? 'utf-8'
+  if v
+    set fileencoding=utf-8
+    echo 'converted to utf-8'
+    write
+  endif
+endfunction
+
+augroup loaded
+  autocmd!
+  autocmd BufRead * :call Set_encoding_to_utf8()
+augroup END
+
 " --- --- --
 " プラグインまわり
 " --- --- --
