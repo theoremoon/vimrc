@@ -18,7 +18,7 @@ set nocompatible
   if ! isdirectory($HOME.'/.vim/swap')
     call mkdir($HOME.'/.vim/swap', 'p')
   endif
-  set directory=$HOME.'/.vim/swap'
+  set directory=$HOME/.vim/swap
 
   " .un~ファイル
   if has('persistent_undo')
@@ -193,7 +193,7 @@ endif
 
 " NeoBundleの設定
 if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim
+  set runtimepath+=$HOME/.vim/bundle/neobundle.vim
 endif
 
 call neobundle#begin(expand($HOME.'/.vim/bundle'))
