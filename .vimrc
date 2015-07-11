@@ -3,7 +3,6 @@ scriptencoding utf-8
 
 " エンコーディング
   set encoding=utf-8
-  set termencoding=utf-8
   set fileencodings=utf-8,cp932,sjis,euc-jp
 
 " 改行コード
@@ -122,7 +121,7 @@ set shortmess& shortmess+=I
   set formatoptions-=o
 
 " 日本語ヘルプ見る
-set helplang=ja,en
+set helplang=ja
 
 " OSのクリップボード使う
 set clipboard=unnamed
@@ -176,21 +175,6 @@ endfunction
 
 " 文字数カウント
 command! -nargs=0 Wc %s/.//nge
-
-" エンコードを強制的にutf-8にする
-function! Set_encoding_to_utf8()
-  let v = &enc ==? 'utf-8'
-  if v
-    set fileencoding=utf-8
-    echo 'converted to utf-8'
-    write
-  endif
-endfunction
-
-augroup bufread
-  autocmd!
-  autocmd BufRead * :call Set_encoding_to_utf8()
-augroup END
 
 " --- --- --
 " キーマッピング
@@ -251,9 +235,6 @@ let g:ctrlp_cmd = 'CtrlP'
   let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
 
 " vim-easymotion
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_leader_key = '<space>'
-map (easymotion_prefix)
 map <Leader> <Plug>(easymotion-prefix)
 
 nmap <Leader>s <Plug>(easymotion-s2)
