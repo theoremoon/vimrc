@@ -251,7 +251,10 @@ map g/ <Plug>(incsearch-forward)
   map z? <Plug>(incsearch-fuzzy-?)
   map zg/ <Plug>(incsearch-fuzzy-stay)
 
+" カラー設定
+set background=dark
 colorscheme molokai
+syntax on
 
 """ 参考というかぱくり
 """ https://github.com/rhysd/dotfiles/blob/master/vimrc
