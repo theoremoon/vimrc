@@ -291,6 +291,8 @@ let g:neosnippet#snippets_directory = $HOME.'/.vim/snippets'
 
 
 
+" カラー設定
+set background=dark
 colorscheme molokai
 syntax on
 
