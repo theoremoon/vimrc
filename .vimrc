@@ -209,7 +209,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/neomru.vim'
   NeoBundle 'Shougo/vinarise.vim'
-  NeoBundle 'Shougo/neocomplete'
   NeoBundle 'Shougo/vimproc.vim', {
     \ 'build' : {
     \     'windows' : 'tools\\update-dll-mingw',
@@ -235,15 +234,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
   NeoBundle 'tomasr/molokai'
 
-  NeoBundleLazy 'nosami/Omnisharp', {
-        \   'autoload': {'filetypes': ['cs']},
-        \   'build': {
-        \     'windows': 'MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-        \     'mac': 'xbuild server/OmniSharp.sln',
-        \     'unix': 'xbuild server/OmniSharp.sln',
-        \   }
-        \ }
-
 call neobundle#end()
 NeoBundleCheck
 filetype plugin indent on
@@ -264,32 +254,6 @@ map <Leader> <Plug>(easymotion-prefix)
 nmap <Leader>s <Plug>(easymotion-s2)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-
-" OmniSharp with neocomplete
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#auto_completion_start_length = 3
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#enable_camel_case_completion = 1
-let g:neocomplete#enable_underbar_completion = 1
-let g:neocomplete#lock_buffer_name_patter = '\*ku\*'
-let g:neocomplete#enable_quick_match = 1
-let g:neocomplete#enable_auto_select = 1
-
-let g:neocomplete#dictionary_filetype_lists = {
-  \ 'default' : '',
-  \ 'vimshell' : $HOME.'/.vimshell_hist',
-  \ 'vim' : $HOOME.'/.vim/dict/vim.dict'
-  \ }
-
-if !exists('g:neocomplete#keyword_patterns')
-  let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-let g:neosnippet#snippets_directory = $HOME.'/.vim/snippets'
-
-
-
 
 " カラー設定
 set background=dark
