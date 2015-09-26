@@ -206,12 +206,25 @@ endif
 
 call neobundle#begin(expand($HOME.'/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
+  NeoBundle 'Shougo/vimproc.vim', {
+        \ 'build' : {
+        \     'windows' : 'tools\\update-dll-mingw',
+        \     'cygwin' : 'make -f make_cygwin.mak',
+        \     'mac' : 'make -f make_mac.mak',
+        \     'linux' : 'make',
+        \     'unix' : 'gmake',
+        \    },
+        \ }
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/neomru.vim'
+  NeoBundle 'Shougo/unite-outline'
 
+  NeoBundle 'scrooloose/syntastic' "Syntax checker
+  NeoBundle 'nvie/vim-flake8' "Python Syntax Checker
   NeoBundle 'ctrlpvim/ctrlp.vim'
   NeoBundle 'nixprime/cpsm'
 
+  NeoBundle 'thinca/vim-quickrun'
   NeoBundle 'tomtom/tcomment_vim'
   NeoBundle 'bronson/vim-trailing-whitespace'
   NeoBundle 'tpope/vim-surround'
@@ -219,6 +232,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
   NeoBundle 'haya14busa/incsearch.vim'
   NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 
+  NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'tomasr/molokai'
 call neobundle#end()
 NeoBundleCheck
@@ -251,9 +265,14 @@ map g/ <Plug>(incsearch-forward)
   map z? <Plug>(incsearch-fuzzy-?)
   map zg/ <Plug>(incsearch-fuzzy-stay)
 
+"Syntax Check
+let g:syntastic_haskell_checksers=['hlint']
+autocmd BufRead,BufNew,BufNewFile *.asm SyntasticToggleMode
+
 " カラー設定
+colorscheme solarized
+let g:solarized_termcolors=256
 set background=dark
-colorscheme molokai
 syntax on
 
 """ 参考というかぱくり
