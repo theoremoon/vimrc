@@ -206,18 +206,23 @@ endif
 
 call neobundle#begin(expand($HOME.'/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-  NeoBundle 'Shougo/vimproc.vim', {
-        \ 'build' : {
-        \     'windows' : 'tools\\update-dll-mingw',
-        \     'cygwin' : 'make -f make_cygwin.mak',
-        \     'mac' : 'make -f make_mac.mak',
-        \     'linux' : 'make',
-        \     'unix' : 'gmake',
-        \    },
-        \ }
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/neomru.vim'
   NeoBundle 'Shougo/unite-outline'
+  NeoBundle 'Shougo/vinarise.vim'
+  NeoBundle 'Shougo/vimproc.vim', {
+    \ 'build' : {
+    \     'windows' : 'tools\\update-dll-mingw',
+    \     'cygwin' : 'make -f make_cygwin.mak',
+    \     'mac' : 'make -f make_mac.mak',
+    \     'linux' : 'make',
+    \     'unix' : 'gmake',
+    \    },
+    \ }
+
+  NeoBundle 'mattn/emmet-vim'
+
+  NeoBundle 'thinca/vim-quickrun'
 
   NeoBundle 'ctrlpvim/ctrlp.vim'
   NeoBundle 'nixprime/cpsm'
@@ -227,11 +232,11 @@ NeoBundleFetch 'Shougo/neobundle.vim'
   NeoBundle 'bronson/vim-trailing-whitespace'
   NeoBundle 'tpope/vim-surround'
   NeoBundle 'easymotion/vim-easymotion'
-  NeoBundle 'haya14busa/incsearch.vim'
-  NeoBundle 'haya14busa/incsearch-fuzzy.vim'
+  NeoBundle 'fatih/vim-go'
 
   NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'tomasr/molokai'
+
 call neobundle#end()
 NeoBundleCheck
 filetype plugin indent on
@@ -252,16 +257,6 @@ map <Leader> <Plug>(easymotion-prefix)
 nmap <Leader>s <Plug>(easymotion-s2)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-
-" incsearch.vim
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-forward)
-map g/ <Plug>(incsearch-forward)
-
-  " fuzzy
-  map z/ <Plug>(incsearch-fuzzy-/)
-  map z? <Plug>(incsearch-fuzzy-?)
-  map zg/ <Plug>(incsearch-fuzzy-stay)
 
 " カラー設定
 colorscheme solarized
