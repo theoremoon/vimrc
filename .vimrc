@@ -219,8 +219,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
   NeoBundle 'Shougo/neomru.vim'
   NeoBundle 'Shougo/unite-outline'
 
-  NeoBundle 'scrooloose/syntastic' "Syntax checker
-  NeoBundle 'nvie/vim-flake8' "Python Syntax Checker
   NeoBundle 'ctrlpvim/ctrlp.vim'
   NeoBundle 'nixprime/cpsm'
 
@@ -264,10 +262,6 @@ map g/ <Plug>(incsearch-forward)
   map z/ <Plug>(incsearch-fuzzy-/)
   map z? <Plug>(incsearch-fuzzy-?)
   map zg/ <Plug>(incsearch-fuzzy-stay)
-
-"Syntax Check
-let g:syntastic_haskell_checksers=['hlint']
-autocmd BufRead,BufNew,BufNewFile *.asm SyntasticToggleMode
 
 " カラー設定
 colorscheme solarized
