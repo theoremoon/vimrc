@@ -26,6 +26,7 @@ set indentexpr=GetVimIndent()  " VimScriptを用いて、インデントを計�
 set tabstop=2
 set shiftwidth=2
 set softtabstop=0	" Tabで入力される空白の量。0にするとtabstopの値になる
+set textwidth=0
 
 if has("autocmd")
 	filetype plugin on	" ファイルタイプが変更されたとき、ファイルタイプ用のプラグインを自動読み込み
