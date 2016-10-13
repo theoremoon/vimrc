@@ -8,6 +8,15 @@ set cursorline	" カーソル行をハイライト
 set nocompatible
 set virtualedit+=block " 矩形選択で自由に移動
 
+set fileencoding=utf-8
+set encoding=utf-8
+
+set directory=~/vim
+set backupdir=~/vim
+set undodir=~/vim
+
+set viminfo+=n~/vim
+
 comclear
 command! Ev edit $MYVIMRC	" Evコマンドでvimrcを編集
 command! Rv source $MYVIMRC	" Rvコマンドでvimrcを読みこみ
@@ -21,18 +30,12 @@ augroup END
 set autoindent	" 自動インデント
 set smartindent " 新しい行を開始したとき、新しい行のインデントを現在と同じにする
 set cindent	" Cプログラムファイルの自動インデント
-set indentexpr=GetVimIndent()  " VimScriptを用いて、インデントを計算する
+" set indentexpr=GetVimIndent()  " VimScriptを用いて、インデントを計算する
 
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=0
 set softtabstop=0	" Tabで入力される空白の量。0にするとtabstopの値になる
 set textwidth=0
-
-if has("autocmd")
-	filetype plugin on	" ファイルタイプが変更されたとき、ファイルタイプ用のプラグインを自動読み込み
-	filetype indent on	" インデント設定を自動読み込み
-endif
-
 
 " 前回の編集位置に移動
 nnoremap gb '[ 
@@ -42,3 +45,24 @@ set laststatus=2	" 常にステータスラインを表示
 set ruler		" ルーラを表示
 
 syntax enable	" ハイライトする
+
+set nocompatible
+
+set rtp+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+if dein#load_state(expand('~/.vim/dein'))
+	call dein#begin(expand('~/.vim/dein'))
+	let g:dein_dir=expand('~/.vim/dein')
+	let s:toml=g:dein_dir . '/dein.toml'
+	let s:lazy_toml=g:dein_dir .'/dein_lazy.toml'
+
+	call dein#load_toml(s:toml, {'lazy': 0})
+	call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+	call dein#end()
+	call dein#save_state()
+endif
+if dein#check_install()
+	call dein#install()
+endif
+filetype plugin indent on
