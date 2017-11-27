@@ -1,68 +1,90 @@
-set autoread	" よそでファイルが変更されたら読み込む
-set hidden	" ファイルをロックしない（編集中でもほかから開ける
-set vb t_vb=	" Beep音を消す
-set showcmd	" 現在のコマンドを表示
-set showmode 	" 現在のモードを表示
+set sw=4
+set ts=4
+set laststatus=2
 set number
-set cursorline	" カーソル行をハイライト
-set nocompatible
-set virtualedit+=block " 矩形選択で自由に移動
+set ruler
 
-set fileencoding=utf-8
-set encoding=utf-8
+" plugs
+call plug#begin('~/.vim/plugged')
+    "General
+	Plug 'Shougo/denite.nvim'
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'tpope/vim-sensible'
+	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-endwise'
+	Plug 'tyru/caw.vim'
+	Plug 'vim-syntastic/syntastic'
+	Plug 'tpope/vim-fugitive'
+    "php
+        Plug 'padawan-php/deoplete-padawan', { 'do': 'composer install', 'for': 'php' }
+	"clojure
+		Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+		Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
+		Plug 'tpope/vim-dispatch', { 'for': 'clojure' }
+		Plug 'tpope/vim-salve', { 'for': 'clojure' }
+	"d
+		Plug 'landaire/deoplete-d', {'for': 'd'}
+		Plug 'idanarye/vim-dutyl', {'for': 'd'}
+	"go
+		Plug 'fatih/vim-go', {'for': 'go'}
+    "colorscheme
+	Plug 'romainl/Apprentice'
+    "My plugins
+	Plug 'theoldmoon0602/codecolor'
+	Plug 'theoldmoon0602/vim-eval'
+call plug#end()
 
-set directory=~/vim
-set backupdir=~/vim
-set undodir=~/vim
 
-set viminfo+=n~/vim
+" leader key
+let mapleader="\<Space>"
+nnoremap <Leader>w :w<CR>
 
-comclear
-command! Ev edit $MYVIMRC	" Evコマンドでvimrcを編集
-command! Rv source $MYVIMRC	" Rvコマンドでvimrcを読みこみ
+" copy and paste
+vmap <Leader>y "+y
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
-augroup vimrc
+" do not overwrite register on replacing paste
+function! RestoreRegister()
+	let @"=s:restore_reg
+	return ''
+endfunction
+function! s:Repl()
+	let s:restore_reg=@"
+	return "p@=RestoreRegister()\<cr>"
+endfunction
+vmap <silent> <expr> p <sid>Repl()
+
+let g:deoplete#enable_at_startup = 1
+
+" Denite key mappings
+nnoremap <Leader>t :Denite tag<CR>
+nnoremap <Leader>o :Denite outline<CR>
+nnoremap <C-p> :Denite file_rec<CR>
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" php
+let g:syntastic_php_checkers = ['php']
+
+" d
+let g:deoplete#sources#d#dcd_server_autostart=1
+
+augroup goCmds
 	autocmd!
-	autocmd vimrc BufEnter * lcd %:p:h " 開いているファイルのディレクトリをカレントディレクトリにする（ローカル
+	autocmd BufWritePost *.go :GoErrCheck
 augroup END
 
+" dictionary completion deoplete or C-x C-k 
+set dictionary=/usr/share/dict/words
+set dictionary+=/usr/share/dict/american-english
+call deoplete#custom#source('dictionary', 'sorters', [])
+inoremap <C-d> <C-x><C-k>
 
-set autoindent	" 自動インデント
-set smartindent " 新しい行を開始したとき、新しい行のインデントを現在と同じにする
-set cindent	" Cプログラムファイルの自動インデント
-" set indentexpr=GetVimIndent()  " VimScriptを用いて、インデントを計算する
-
-set tabstop=4
-set shiftwidth=0
-set softtabstop=0	" Tabで入力される空白の量。0にするとtabstopの値になる
-set textwidth=0
-
-" 前回の編集位置に移動
-nnoremap gb '[ 
-nnoremap gp ']
-
-set laststatus=2	" 常にステータスラインを表示
-set ruler		" ルーラを表示
-
-syntax enable	" ハイライトする
-
-set nocompatible
-
-set rtp+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-
-if dein#load_state(expand('~/.vim/dein'))
-	call dein#begin(expand('~/.vim/dein'))
-	let g:dein_dir=expand('~/.vim/dein')
-	let s:toml=g:dein_dir . '/dein.toml'
-	let s:lazy_toml=g:dein_dir .'/dein_lazy.toml'
-
-	call dein#load_toml(s:toml, {'lazy': 0})
-	call dein#load_toml(s:lazy_toml, {'lazy': 1})
-
-	call dein#end()
-	call dein#save_state()
-endif
-if dein#check_install()
-	call dein#install()
-endif
-filetype plugin indent on
+" colorscheme
+colorscheme apprentice
