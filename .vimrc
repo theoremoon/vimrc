@@ -1,94 +1,176 @@
-set laststatus=2
-set number
-set ruler
-
-set directory=~/.vim/tmp
-set backupdir=~/.vim/backup
-set undodir=~/.vim/undodir
-set viminfo+=n~/.vim/viminfo
-
-set shiftwidth=2
-set tabstop=2
-
-" plugs
+" plugin manager 
 call plug#begin('~/.vim/plugged')
-    "General
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	Plug 'tpope/vim-sleuth'
-	Plug 'vim-syntastic/syntastic'
-	Plug 'othree/html5.vim'
-	Plug 'idanarye/vim-dutyl', {'for': 'd'}
-	Plug 'mattn/emmet-vim'
-	Plug 'ctrlpvim/ctrlp.vim'
-	Plug 'dleonard0/pony-vim-syntax'
-	Plug 'airblade/vim-gitgutter'
-	Plug 'sheerun/vim-polyglot'  " collection of language packs
-    "colorscheme
-	Plug 'romainl/Apprentice'
-	Plug 'yamasy1549/gochiusa.vim'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'tpope/vim-surround' "select and S[surrounder], cs[from][to], ds[surrounder]
+  Plug 'tpope/vim-commentary'  "gcc -> comment in/out
+  Plug 'mbbill/undotree'
+  Plug 'simnalamburt/vim-mundo'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'w0rp/ale'
+  Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/incsearch-fuzzy.vim'
+  Plug 'mattn/emmet-vim' "C-y , on insert mode
+  Plug 'sheerun/vim-polyglot'
+  Plug 'itchyny/lightline.vim'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+  Plug 'LeafCage/yankround.vim'
+  Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" colorscheme
+  Plug 'yamasy1549/gochiusa.vim'
+  Plug 'junegunn/seoul256.vim'
+  Plug 'romainl/Apprentice'
 call plug#end()
 
+set number
+set autoindent
+set smartindent
+" set lazyredraw 
+set laststatus=2
+set showcmd
+set visualbell
+set backspace=indent,eol,start
+set timeoutlen=500  "for mapped key timeout
+set whichwrap=b,s  "for <BS>, <Space> move in normal mode
+set shortmess=aIT
+set hlsearch
+set incsearch
+set hidden  "use hidden buffer
+set ignorecase smartcase
+set wildmenu  "use tab completion on command-line mode
+set wildmode=full
+set tabstop=2
+set shiftwidth=2
+set expandtab smarttab
+set scrolloff=5
+set encoding=utf-8
+set list  "for display trailing whitespace
+set listchars=tab:\|\  "tab showed as |
+set virtualedit=block
+set nojoinspaces
+set diffopt=filler,vertical
+set autoread
+set clipboard=""
+set grepformat=%f:%l:%c:%m,%f:%l:%m  "parse format for external grep
+set completeopt=menuone,preview
+set nocursorline
+set nrformats=hex
+set formatoptions+=1j
+set breakindent
+if has('termguicolors')
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+set backupdir=~/.vim/backupdir
+set directory=~/.vim/swapdir
+set undodir=~/.vim/undodir
+set viminfo+=n~/.vim/viminfo
+set complete=.,w,b,u,k,i,d,t  "current buffer, other buffers, buffer lists, dictionary, current file and includes, same, tagfiles
+set textwidth=0
+set isfname-==  "= is not filename
+set nofixeol
+set signcolumn=yes
 
-" leader key
+if !isdirectory(expand("~/.vim/backupdir"))
+  call mkdir(expand("~/.vim/backupdir"))
+endif
+if !isdirectory(expand("~/.vim/swapdir"))
+  call mkdir(expand("~/.vim/swapdir"))
+endif
+if !isdirectory(expand("~/.vim/undodir"))
+  call mkdir(expand("~/.vim/undodir"))
+endif
+
 let mapleader="\<Space>"
+let maplocalleader="\<Space>"
+
+""" mappings
+
+" open new line 
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
+
+" Save
 nnoremap <Leader>w :w<CR>
+
+" Quit
 nnoremap <Leader>q :q<CR>
+nnoremap <Leader>Q :qa!<CR>
+
+" source $MYVIMRC
+nnoremap <Leader>e :source $MYVIMRC<CR>
+
+inoremap jk <Esc>
+
+" Move in insert mode 
+inoremap <C-h> <C-o>h
+inoremap <C-l> <C-o>a
+inoremap <C-j> <C-o>j
+inoremap <C-k> <C-o>k
+inoremap <C-a> <C-o>0
+inoremap <C-e> <C-o>$
+
+" QuickFix
+nnoremap ]q :cnext<CR>zz
+nnoremap [q :cprev<CR>zz
+nnoremap ]l :lnext<CR>zz
+nnoremap [l :lprev<CR>zz
+
+" Buffers
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>
+
+" Tabs
+nnoremap ]t :tabn<CR>
+nnoremap [t :tabp<CR>
+
+" Command Line mode
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
 
 " copy and paste
-vmap <Leader>y "+y
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
+vnoremap <Leader>y "+y
+vnoremap <Leader>p "+p
+nnoremap <Leader>p "+p
 
-" do not overwrite register on replacing paste
-function! RestoreRegister()
-	let @"=s:restore_reg
-	return ''
-endfunction
-function! s:Repl()
-	let s:restore_reg=@"
-	return "p@=RestoreRegister()\<cr>"
-endfunction
-vmap <silent> <expr> p <sid>Repl()
+" -- Plugins ---
+xmap ga <Plug>(EasyAlign)  "usage: ga=, ga2|
 
-let g:deoplete#enable_at_startup = 1
+nnoremap U :UndotreeToggle<CR>
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+nmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap gp <Plug>(yankround-gp)
+nmap gP <Plug>(yankround-gP)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
 
-" d
-let g:dutyl_stdImportPaths=['/usr/local/dlang/dmd']
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+map z/ <Plug>(incsearch-fuzzy-/)
+map z? <Plug>(incsearch-fuzzy-?)
+map zg/ <Plug>(incsearch-fuzzy-stay)
 
-" python
-let g:syntastic_python_checkers=['pep8']
-let g:syntastic_python_pep8_args=['--ignore=E501,E126,E127,W391,E221,E222,E402,W191']
+nnoremap <Leader>j :Ag<CR>
+nnoremap <Leader>f :Files<CR>
 
-" php
-let g:syntastic_php_checkers = ['php']
+let g:ale_set_loclist=0
+let g:ale_set_quickfix=1
 
-" python path
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
+let g:deoplete#enable_at_startup=1
 
-
-
-" dictionary completion deoplete or C-x C-k 
-set dictionary=/usr/share/dict/words
-set dictionary+=/usr/share/dict/american-english
-call deoplete#custom#source('dictionary', 'sorters', [])
-inoremap <C-d> <C-x><C-k>
-
-" colorscheme
-" colorscheme apprentice
-colorscheme gochiusa
-
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '(\.(git|hg|svn)$)|(^vendor$)',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
+let g:LanguageClient_severCommands ={
+  \ 'd': ['serve-d'],
   \ }
+nnoremap <silent>gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent>rn :call LanguageClient#textDocument_rename()<CR>
 
-set signcolumn=yes
+
+colorscheme seoul256
+syntax on
