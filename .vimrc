@@ -1,43 +1,38 @@
-set sw=4
-set ts=4
 set laststatus=2
 set number
 set ruler
 
+set directory=~/.vim/tmp
+set backupdir=~/.vim/backup
+set undodir=~/.vim/undodir
+set viminfo+=n~/.vim/viminfo
+
+set shiftwidth=2
+set tabstop=2
+
 " plugs
 call plug#begin('~/.vim/plugged')
     "General
-	Plug 'Shougo/denite.nvim'
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	Plug 'tpope/vim-sensible'
-	Plug 'tpope/vim-surround'
-	Plug 'tpope/vim-endwise'
-	Plug 'tyru/caw.vim'
+	Plug 'tpope/vim-sleuth'
 	Plug 'vim-syntastic/syntastic'
-	Plug 'tpope/vim-fugitive'
-    "php
-        Plug 'padawan-php/deoplete-padawan', { 'do': 'composer install', 'for': 'php' }
-	"clojure
-		Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-		Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
-		Plug 'tpope/vim-dispatch', { 'for': 'clojure' }
-		Plug 'tpope/vim-salve', { 'for': 'clojure' }
-	"d
-		Plug 'landaire/deoplete-d', {'for': 'd'}
-		Plug 'idanarye/vim-dutyl', {'for': 'd'}
-	"go
-		Plug 'fatih/vim-go', {'for': 'go'}
+	Plug 'othree/html5.vim'
+	Plug 'idanarye/vim-dutyl', {'for': 'd'}
+	Plug 'mattn/emmet-vim'
+	Plug 'ctrlpvim/ctrlp.vim'
+	Plug 'dleonard0/pony-vim-syntax'
+	Plug 'airblade/vim-gitgutter'
+	Plug 'sheerun/vim-polyglot'  " collection of language packs
     "colorscheme
 	Plug 'romainl/Apprentice'
-    "My plugins
-	Plug 'theoldmoon0602/codecolor'
-	Plug 'theoldmoon0602/vim-eval'
+	Plug 'yamasy1549/gochiusa.vim'
 call plug#end()
 
 
 " leader key
 let mapleader="\<Space>"
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :q<CR>
 
 " copy and paste
 vmap <Leader>y "+y
@@ -59,26 +54,26 @@ vmap <silent> <expr> p <sid>Repl()
 
 let g:deoplete#enable_at_startup = 1
 
-" Denite key mappings
-nnoremap <Leader>t :Denite tag<CR>
-nnoremap <Leader>o :Denite outline<CR>
-nnoremap <C-p> :Denite file_rec<CR>
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+" d
+let g:dutyl_stdImportPaths=['/usr/local/dlang/dmd']
+
+" python
+let g:syntastic_python_checkers=['pep8']
+let g:syntastic_python_pep8_args=['--ignore=E501,E126,E127,W391,E221,E222,E402,W191']
+
 " php
 let g:syntastic_php_checkers = ['php']
 
-" d
-let g:deoplete#sources#d#dcd_server_autostart=1
+" python path
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
 
-augroup goCmds
-	autocmd!
-	autocmd BufWritePost *.go :GoErrCheck
-augroup END
+
 
 " dictionary completion deoplete or C-x C-k 
 set dictionary=/usr/share/dict/words
@@ -87,4 +82,13 @@ call deoplete#custom#source('dictionary', 'sorters', [])
 inoremap <C-d> <C-x><C-k>
 
 " colorscheme
-colorscheme apprentice
+" colorscheme apprentice
+colorscheme gochiusa
+
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '(\.(git|hg|svn)$)|(^vendor$)',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+set signcolumn=yes
